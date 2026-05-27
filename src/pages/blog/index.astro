@@ -1,0 +1,282 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+const sorted = allPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const categories = ['全部', '個人思考', '影視幕後', '工具流', '社群紀錄'];
+
+const categoryEn: Record<string, string> = {
+  '個人思考': 'PERSONAL THOUGHTS',
+  '影視幕後': 'FILM NOTES',
+  '工具流':   'TOOLS & WORKFLOW',
+  '社群紀錄': 'COMMUNITY',
+};
+
+function formatDate(date: Date) {
+  return date.toLocaleDateString('zh-TW', { year: 'numeric', month: '2-digit', day: '2-digit' })
+    .replace(/\//g, '.');
+}
+---
+
+<BaseLayout title="所有文章 — 逸今天又分心了" description="逸的部落格——個人思考、影視幕後、工具流、社群紀錄">
+
+  <div class="blog-page">
+
+    <header class="blog-header">
+      <div class="blog-header-inner">
+        <div class="blog-label">All Posts</div>
+        <h1 class="blog-heading">文章</h1>
+        <p class="blog-sub">到目前為止，共 {sorted.length} 篇分心紀錄。</p>
+      </div>
+    </header>
+
+    <div class="blog-body">
+
+      <!-- Category filter (JS-driven) -->
+      <div class="cat-tabs" id="catTabs">
+        {categories.map(cat => (
+          <button class={`cat-tab ${cat === '全部' ? 'active' : ''}`} data-cat={cat}>
+            {cat}
+          </button>
+        ))}
+      </div>
+
+      <!-- Posts list -->
+      <div class="posts-list" id="postsList">
+        {sorted.map((post, i) => (
+          <a
+            class="post-item"
+            href={`/blog/${post.slug}`}
+            data-category={post.data.category}
+          >
+            <div class="post-num">{String(i + 1).padStart(2, '0')}</div>
+            <div class="post-body">
+              <div class="post-meta-row">
+                <span class="post-category">
+                  {post.data.category} · {categoryEn[post.data.category]}
+                </span>
+                <span class="post-date">{formatDate(post.data.date)}</span>
+              </div>
+              <div class="post-title">{post.data.title}</div>
+              <div class="post-excerpt">{post.data.description}</div>
+              {post.data.tags.length > 0 && (
+                <div class="post-tags">
+                  {post.data.tags.map(t => <span class="post-tag">{t}</span>)}
+                </div>
+              )}
+            </div>
+          </a>
+        ))}
+      </div>
+
+      {sorted.length === 0 && (
+        <div class="empty-state">
+          <p>文章準備中，分心需要時間。</p>
+        </div>
+      )}
+
+    </div>
+  </div>
+
+</BaseLayout>
+
+<script>
+const tabs = document.querySelectorAll<HTMLButtonElement>('.cat-tab');
+const items = document.querySelectorAll<HTMLAnchorElement>('.post-item');
+
+// Read category from URL param on load
+const params = new URLSearchParams(window.location.search);
+const initCat = params.get('category') ?? '全部';
+setFilter(initCat);
+
+tabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    const cat = tab.dataset.cat ?? '全部';
+    setFilter(cat);
+    const url = new URL(window.location.href);
+    if (cat === '全部') url.searchParams.delete('category');
+    else url.searchParams.set('category', cat);
+    history.replaceState(null, '', url.toString());
+  });
+});
+
+function setFilter(cat: string) {
+  tabs.forEach(t => t.classList.toggle('active', t.dataset.cat === cat));
+  items.forEach(item => {
+    const match = cat === '全部' || item.dataset.category === cat;
+    (item as HTMLElement).style.display = match ? '' : 'none';
+  });
+  // Re-number visible items
+  let n = 1;
+  items.forEach(item => {
+    if ((item as HTMLElement).style.display !== 'none') {
+      const numEl = item.querySelector('.post-num');
+      if (numEl) numEl.textContent = String(n).padStart(2, '0');
+      n++;
+    }
+  });
+}
+</script>
+
+<style>
+.blog-page { padding-top: 80px; }
+
+.blog-header {
+  background-color: var(--yi-paper);
+  background-image: repeating-linear-gradient(
+    0deg,
+    transparent, transparent 47px,
+    rgba(217,206,184,0.45) 47px, rgba(217,206,184,0.45) 48px
+  );
+  padding: 80px 0 56px;
+  border-bottom: 1px solid var(--yi-line);
+  position: relative;
+}
+.blog-header::before {
+  content: '';
+  position: absolute;
+  left: calc(12vw - 24px);
+  top: 0; bottom: 0;
+  width: 1px;
+  background: rgba(196,113,74,0.15);
+}
+.blog-header-inner {
+  padding: 0 12vw;
+}
+.blog-label {
+  font-family: var(--yi-font-display);
+  font-style: italic;
+  font-size: 12px;
+  color: var(--yi-sage);
+  letter-spacing: 0.28em;
+  margin-bottom: 12px;
+}
+.blog-heading {
+  font-family: var(--yi-font-kai);
+  font-size: clamp(40px, 6vw, 80px);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--yi-brown);
+  line-height: 1;
+  margin-bottom: 16px;
+}
+.blog-sub {
+  font-size: 14px;
+  color: var(--yi-dust);
+  letter-spacing: 0.08em;
+}
+
+.blog-body {
+  padding: 48px 12vw 100px;
+}
+
+/* Category tabs */
+.cat-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+.cat-tab {
+  font-family: var(--yi-font-sans);
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  color: var(--yi-dust);
+  background: none;
+  border: 1px solid var(--yi-line);
+  padding: 7px 18px;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.cat-tab:hover { border-color: var(--yi-warm); color: var(--yi-warm); }
+.cat-tab.active {
+  background: var(--yi-warm);
+  color: var(--yi-cream);
+  border-color: var(--yi-warm);
+}
+
+/* Posts */
+.posts-list { display: flex; flex-direction: column; }
+.post-item {
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  gap: 28px;
+  align-items: start;
+  padding: 32px 0;
+  border-bottom: 1px solid var(--yi-line);
+  text-decoration: none;
+  color: inherit;
+  transition: padding-left 0.25s;
+}
+.post-item:hover { padding-left: 8px; background: rgba(237,231,214,0.3); }
+.post-num {
+  font-family: var(--yi-font-display);
+  font-style: italic;
+  font-size: 28px;
+  color: var(--yi-line);
+  line-height: 1;
+  padding-top: 4px;
+}
+.post-body { display: flex; flex-direction: column; gap: 8px; }
+.post-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.post-category {
+  font-size: 11px;
+  color: var(--yi-sage);
+  letter-spacing: 0.22em;
+}
+.post-date {
+  font-family: var(--yi-font-display);
+  font-style: italic;
+  font-size: 12px;
+  color: var(--yi-dust);
+  letter-spacing: 0.1em;
+}
+.post-title {
+  font-family: var(--yi-font-kai);
+  font-size: 21px;
+  font-weight: 700;
+  color: var(--yi-brown);
+  letter-spacing: 0.05em;
+  line-height: 1.4;
+}
+.post-excerpt {
+  font-size: 14px;
+  color: var(--yi-dust);
+  line-height: 1.8;
+  letter-spacing: 0.03em;
+}
+.post-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.post-tag {
+  font-size: 11px;
+  color: var(--yi-sage);
+  border: 1px solid rgba(122,140,110,0.3);
+  padding: 2px 8px;
+  border-radius: 2px;
+  letter-spacing: 0.08em;
+}
+
+.empty-state {
+  padding: 80px 0;
+  text-align: center;
+  color: var(--yi-dust);
+  font-family: var(--yi-font-kai);
+  font-size: 18px;
+  letter-spacing: 0.08em;
+}
+
+@media (max-width: 768px) {
+  .blog-header-inner, .blog-body { padding-left: 24px; padding-right: 24px; }
+  .post-meta-row { flex-direction: column; align-items: flex-start; gap: 4px; }
+}
+</style>

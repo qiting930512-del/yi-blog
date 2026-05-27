@@ -1,0 +1,77 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  ogImage?: string;
+}
+
+const { title, description = '逸今天又分心了——分心是一種選擇。', ogImage } = Astro.props;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const currentPath = Astro.url.pathname;
+---
+
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonicalURL} />
+  <link rel="alternate" type="application/rss+xml" title="逸今天又分心了" href="/rss.xml" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonicalURL} />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="zh_TW" />
+  {ogImage && <meta property="og:image" content={ogImage} />}
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+</head>
+<body>
+
+<nav id="nav">
+  <a class="nav-logo" href="/">逸</a>
+  <ul class="nav-links">
+    <li><a href="/" class={currentPath === '/' ? 'active' : ''}>首頁</a></li>
+    <li><a href="/blog" class={currentPath.startsWith('/blog') ? 'active' : ''}>文章</a></li>
+    <li><a href="/about" class={currentPath === '/about' ? 'active' : ''}>關於逸</a></li>
+  </ul>
+  <a class="nav-handle" href="https://www.instagram.com/yijintianyoufenxinliao" target="_blank" rel="noopener">@yijintianyoufenxinliao</a>
+</nav>
+
+<main>
+  <slot />
+</main>
+
+<footer>
+  <div class="footer-brand">逸今天又分心了</div>
+  <div class="footer-tagline">分心是一種選擇。</div>
+  <div class="footer-copy">© 2026 @yijintianyoufenxinliao</div>
+</footer>
+
+<script>
+const nav = document.getElementById('nav');
+if (nav) {
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+  });
+}
+
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+    }
+  });
+}, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

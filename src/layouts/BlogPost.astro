@@ -1,0 +1,258 @@
+---
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  date: Date;
+  category: string;
+  tags: string[];
+}
+
+const { title, description, date, category, tags } = Astro.props;
+
+const dateStr = date.toLocaleDateString('zh-TW', {
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+}).replace(/\//g, '.');
+
+const categoryColors: Record<string, string> = {
+  '個人思考': '#7A8C6E',
+  '影視幕後': '#C4714A',
+  '工具流':   '#8C6438',
+  '社群紀錄': '#B09070',
+};
+const catColor = categoryColors[category] ?? '#8C6438';
+---
+
+<BaseLayout title={`${title} — 逸今天又分心了`} description={description}>
+  <article class="post-page">
+
+    <!-- 紙紋背景 header -->
+    <header class="post-header">
+      <div class="post-header-inner">
+        <a class="post-back" href="/blog">← 所有文章</a>
+        <div class="post-meta">
+          <span class="post-cat" style={`color: ${catColor}; border-color: ${catColor}40`}>{category}</span>
+          <span class="post-date">{dateStr}</span>
+        </div>
+        <h1 class="post-title">{title}</h1>
+        <p class="post-description">{description}</p>
+        {tags.length > 0 && (
+          <div class="post-tags">
+            {tags.map(t => <span class="post-tag">{t}</span>)}
+          </div>
+        )}
+      </div>
+    </header>
+
+    <!-- 文章正文 -->
+    <div class="post-body-wrap">
+      <div class="post-content">
+        <slot />
+      </div>
+    </div>
+
+    <!-- 底部 -->
+    <div class="post-footer-nav">
+      <a class="btn-warm" href="/blog">← 更多文章</a>
+    </div>
+
+  </article>
+</BaseLayout>
+
+<style>
+.post-page {
+  padding-top: 80px;
+  min-height: 100vh;
+}
+
+.post-header {
+  background-color: var(--yi-cream);
+  background-image: repeating-linear-gradient(
+    0deg,
+    transparent, transparent 47px,
+    rgba(217,206,184,0.5) 47px, rgba(217,206,184,0.5) 48px
+  );
+  padding: 80px 0 60px;
+  position: relative;
+  border-bottom: 1px solid var(--yi-line);
+}
+
+.post-header::before {
+  content: '';
+  position: absolute;
+  left: calc(12vw - 24px);
+  top: 0; bottom: 0;
+  width: 1px;
+  background: rgba(196,113,74,0.18);
+}
+
+.post-header-inner {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 12vw;
+}
+
+.post-back {
+  display: inline-block;
+  font-size: 13px;
+  color: var(--yi-dust);
+  letter-spacing: 0.1em;
+  margin-bottom: 28px;
+  transition: color 0.2s;
+}
+.post-back:hover { color: var(--yi-warm); }
+
+.post-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.post-cat {
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  border: 1px solid;
+  padding: 3px 10px;
+  border-radius: 2px;
+}
+
+.post-date {
+  font-family: var(--yi-font-display);
+  font-style: italic;
+  font-size: 13px;
+  color: var(--yi-dust);
+  letter-spacing: 0.1em;
+}
+
+.post-title {
+  font-family: var(--yi-font-kai);
+  font-size: clamp(28px, 4vw, 48px);
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: 0.04em;
+  color: var(--yi-brown);
+  margin-bottom: 16px;
+}
+
+.post-description {
+  font-size: 16px;
+  color: var(--yi-dust);
+  line-height: 1.9;
+  letter-spacing: 0.04em;
+  margin-bottom: 20px;
+}
+
+.post-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.post-tag {
+  font-size: 11px;
+  color: var(--yi-sage);
+  border: 1px solid rgba(122,140,110,0.3);
+  padding: 3px 10px;
+  border-radius: 2px;
+  letter-spacing: 0.1em;
+}
+
+/* 正文區 */
+.post-body-wrap {
+  background: var(--yi-paper);
+  border-bottom: 1px solid var(--yi-line);
+}
+
+.post-content {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 60px 12vw 80px;
+  font-size: 17px;
+  line-height: 2.1;
+  letter-spacing: 0.04em;
+  color: var(--yi-brown);
+}
+
+/* Markdown 內文樣式 */
+.post-content h2 {
+  font-family: var(--yi-font-kai);
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--yi-brown);
+  letter-spacing: 0.05em;
+  margin: 48px 0 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--yi-line);
+}
+.post-content h3 {
+  font-family: var(--yi-font-kai);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--yi-warm);
+  letter-spacing: 0.04em;
+  margin: 36px 0 14px;
+}
+.post-content p { margin-bottom: 24px; }
+.post-content strong {
+  font-weight: 500;
+  color: var(--yi-brown);
+}
+.post-content em {
+  font-family: var(--yi-font-display);
+  font-style: italic;
+  color: var(--yi-rust);
+}
+.post-content a {
+  color: var(--yi-warm);
+  border-bottom: 1px solid rgba(140,100,56,0.3);
+  transition: border-color 0.2s;
+}
+.post-content a:hover { border-color: var(--yi-warm); }
+.post-content blockquote {
+  border-left: 3px solid var(--yi-rust);
+  background: rgba(196,113,74,0.06);
+  padding: 16px 20px;
+  margin: 28px 0;
+  font-family: var(--yi-font-kai);
+  font-size: 18px;
+  line-height: 1.8;
+  letter-spacing: 0.04em;
+  color: var(--yi-brown);
+  border-radius: 0 4px 4px 0;
+}
+.post-content ul, .post-content ol {
+  padding-left: 1.6em;
+  margin-bottom: 24px;
+}
+.post-content li { margin-bottom: 8px; }
+.post-content hr {
+  border: none;
+  border-top: 1px solid var(--yi-line);
+  margin: 40px 0;
+}
+.post-content code {
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  background: rgba(61,43,26,0.06);
+  padding: 2px 6px;
+  border-radius: 2px;
+}
+
+.post-footer-nav {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 48px 12vw;
+}
+
+@media (max-width: 768px) {
+  .post-header-inner,
+  .post-content,
+  .post-footer-nav {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+}
+</style>

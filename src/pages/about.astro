@@ -1,0 +1,218 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="關於逸 — 逸今天又分心了" description="逸是誰？一個喜歡分心的影視遊牧者。">
+
+  <div class="about-page">
+
+    <header class="about-header">
+      <div class="about-header-inner">
+        <div class="about-label">About</div>
+        <h1 class="about-heading">關於逸</h1>
+      </div>
+    </header>
+
+    <div class="about-body">
+      <div class="about-main reveal">
+        <p>
+          我是逸，住在臺灣新北，做影視、寫內容、四處流浪。<br><br>
+          「逸今天又分心了」是我記錄這些分心的地方——
+          那些在片場以外的發現、閱讀筆記、關於創作和生活的碎碎念。<br><br>
+          分心對我來說不是問題，而是一種方法。
+          也許你也是這樣的人。
+        </p>
+      </div>
+
+      <div class="about-items">
+        <div class="about-item reveal">
+          <div class="about-item-num">01.</div>
+          <div>
+            <div class="about-item-title">影視製作</div>
+            <div class="about-item-desc">
+              破繭影像創辦人，負責拍攝、剪輯與品牌影像企劃。
+              以專業打造專業，相信影像可以改變一個品牌的溫度。
+            </div>
+          </div>
+        </div>
+        <div class="about-item reveal">
+          <div class="about-item-num">02.</div>
+          <div>
+            <div class="about-item-title">知識分享</div>
+            <div class="about-item-desc">
+              分享閱讀筆記、創作心得與各種意外發現的美好事物。
+              文章以中文為主，偶爾有英文注記。
+            </div>
+          </div>
+        </div>
+        <div class="about-item reveal">
+          <div class="about-item-num">03.</div>
+          <div>
+            <div class="about-item-title">童軍教練長</div>
+            <div class="about-item-desc">
+              羅浮群教練長，相信戶外與冒險能讓人更清醒。
+              每次活動都是一次自我測試。
+            </div>
+          </div>
+        </div>
+        <div class="about-item reveal">
+          <div class="about-item-num">04.</div>
+          <div>
+            <div class="about-item-title">劇本創作者</div>
+            <div class="about-item-desc">
+              長期開發劇本與世界觀，偏好奇幻、成長、團隊主題。
+              目前進行中：舞台劇《亞洲，生活》。
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="yi-rule" />
+
+      <div class="about-contact reveal">
+        <h2 class="contact-heading">一起做點有意思的事</h2>
+        <p class="contact-sub">無論是合作提案、採訪邀約，還是只是想聊聊，都歡迎。</p>
+        <div class="contact-links">
+          <a class="contact-link" href="mailto:qiting930512@gmail.com">
+            <span class="contact-link-label">Email</span>
+            <span class="contact-link-value">qiting930512@gmail.com</span>
+          </a>
+          <a class="contact-link" href="https://www.instagram.com/yijintianyoufenxinliao" target="_blank" rel="noopener">
+            <span class="contact-link-label">Instagram</span>
+            <span class="contact-link-value">@yijintianyoufenxinliao</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</BaseLayout>
+
+<style>
+.about-page { padding-top: 80px; }
+
+.about-header {
+  background-color: var(--yi-paper);
+  background-image: repeating-linear-gradient(
+    0deg,
+    transparent, transparent 47px,
+    rgba(217,206,184,0.45) 47px, rgba(217,206,184,0.45) 48px
+  );
+  padding: 80px 0 56px;
+  border-bottom: 1px solid var(--yi-line);
+  position: relative;
+}
+.about-header::before {
+  content: '';
+  position: absolute;
+  left: calc(12vw - 24px);
+  top: 0; bottom: 0;
+  width: 1px;
+  background: rgba(196,113,74,0.15);
+}
+.about-header-inner { padding: 0 12vw; }
+.about-label {
+  font-family: var(--yi-font-display);
+  font-style: italic;
+  font-size: 12px;
+  color: var(--yi-sage);
+  letter-spacing: 0.28em;
+  margin-bottom: 12px;
+}
+.about-heading {
+  font-family: var(--yi-font-kai);
+  font-size: clamp(40px, 6vw, 80px);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--yi-brown);
+  line-height: 1;
+}
+
+.about-body {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 64px 12vw 100px;
+}
+
+.about-main p {
+  font-size: 17px;
+  line-height: 2.1;
+  letter-spacing: 0.04em;
+  color: var(--yi-brown);
+  opacity: 0.9;
+  margin-bottom: 48px;
+}
+
+.about-items { display: flex; flex-direction: column; gap: 0; }
+.about-item {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 16px;
+  padding: 28px 0;
+  border-bottom: 1px solid var(--yi-line);
+}
+.about-item-num {
+  font-family: var(--yi-font-display);
+  font-style: italic;
+  font-size: 14px;
+  color: var(--yi-rust);
+  letter-spacing: 0.1em;
+  padding-top: 2px;
+}
+.about-item-title {
+  font-family: var(--yi-font-kai);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--yi-brown);
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+.about-item-desc {
+  font-size: 14px;
+  color: var(--yi-dust);
+  line-height: 1.9;
+  letter-spacing: 0.04em;
+}
+
+.about-contact { margin-top: 48px; }
+.contact-heading {
+  font-family: var(--yi-font-kai);
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  margin-bottom: 12px;
+}
+.contact-sub {
+  font-size: 15px;
+  color: var(--yi-dust);
+  line-height: 1.9;
+  margin-bottom: 32px;
+}
+.contact-links { display: flex; flex-direction: column; gap: 0; }
+.contact-link {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--yi-line);
+  text-decoration: none;
+  transition: padding-left 0.2s;
+}
+.contact-link:hover { padding-left: 8px; }
+.contact-link-label {
+  font-size: 11px;
+  color: var(--yi-warm);
+  letter-spacing: 0.22em;
+}
+.contact-link-value {
+  font-family: var(--yi-font-kai);
+  font-size: 17px;
+  color: var(--yi-brown);
+  letter-spacing: 0.05em;
+}
+
+@media (max-width: 768px) {
+  .about-header-inner, .about-body { padding-left: 24px; padding-right: 24px; }
+}
+</style>

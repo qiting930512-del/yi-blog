@@ -1,0 +1,420 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+const recentPosts = allPosts
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 5);
+
+function formatDate(date: Date) {
+  return date.toLocaleDateString('zh-TW', { year: 'numeric', month: '2-digit', day: '2-digit' })
+    .replace(/\//g, '.');
+}
+
+const categoryEn: Record<string, string> = {
+  '個人思考': 'Personal Thoughts',
+  '影視幕後': 'Film Notes',
+  '工具流':   'Tools & Workflow',
+  '社群紀錄': 'Community',
+};
+---
+
+<BaseLayout title="逸今天又分心了">
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-tag"># 影視遊牧者 · 知識分享創作者</div>
+    <div class="hero-name">逸</div>
+    <div class="hero-channel">今天又分心了</div>
+    <div class="hero-rule"></div>
+    <div class="hero-quote">
+      分心是一種選擇。<br>
+      只是你還不知道<br>
+      自己在選什麼。
+    </div>
+    <div class="hero-cta-group">
+      <a class="btn-warm" href="/blog">看看我在分什麼</a>
+      <a class="btn-outline" href="/about">關於逸</a>
+    </div>
+    <div class="hero-deco">distraction</div>
+  </section>
+
+  <!-- RECENT POSTS -->
+  {recentPosts.length > 0 && (
+    <section id="posts">
+      <div class="posts-header reveal">
+        <div class="posts-heading">最新文章</div>
+        <a class="posts-all" href="/blog">查看全部 →</a>
+      </div>
+      <div class="posts-list reveal">
+        {recentPosts.map((post, i) => (
+          <a class="post-item" href={`/blog/${post.slug}`}>
+            <div class="post-num">0{i + 1}</div>
+            <div class="post-body">
+              <div class="post-category">
+                {post.data.category} · {categoryEn[post.data.category]}
+              </div>
+              <div class="post-title">{post.data.title}</div>
+              <div class="post-excerpt">{post.data.description}</div>
+            </div>
+            <div class="post-date">{formatDate(post.data.date)}</div>
+          </a>
+        ))}
+      </div>
+    </section>
+  )}
+
+  <!-- CATEGORIES -->
+  <section id="categories">
+    <div class="categories-header reveal">
+      <div class="cat-section-label">Content Direction</div>
+      <div class="cat-heading">我在分什麼心</div>
+    </div>
+    <div class="cat-grid">
+      <a class="cat-card reveal" href="/blog?category=個人思考">
+        <span class="cat-icon">📖</span>
+        <div class="cat-title">個人思考</div>
+        <div class="cat-en">Personal Thoughts</div>
+        <div class="cat-desc">那些讓我停下來的瞬間——一個問題、一句話、一個在腦袋裡轉了三天的念頭。</div>
+      </a>
+      <a class="cat-card reveal" href="/blog?category=影視幕後">
+        <span class="cat-icon">🎬</span>
+        <div class="cat-title">影視幕後</div>
+        <div class="cat-en">Film Notes</div>
+        <div class="cat-desc">從影像工作者的視角看電影、廣告、拍攝現場，以及所有有光影的東西。</div>
+      </a>
+      <a class="cat-card reveal" href="/blog?category=工具流">
+        <span class="cat-icon">⚙️</span>
+        <div class="cat-title">工具流</div>
+        <div class="cat-en">Tools & Workflow</div>
+        <div class="cat-desc">AI 工具、工作方法、Notion 系統、Claude Code——讓思考更有效率的那些東西。</div>
+      </a>
+      <a class="cat-card reveal" href="/blog?category=社群紀錄">
+        <span class="cat-icon">🏕️</span>
+        <div class="cat-title">社群紀錄</div>
+        <div class="cat-en">Community</div>
+        <div class="cat-desc">羅浮群活動、童軍訓練、一起做事的人——關於社群和團隊的真實紀錄。</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- QUOTE -->
+  <section id="quote">
+    <div class="quote-text reveal">
+      「分心是一種選擇。<br>
+      <span class="quote-em">只是你還不知道<br>自己在選什麼。</span>」
+    </div>
+    <div class="quote-rule reveal"></div>
+    <div class="quote-source reveal">— 逸今天又分心了</div>
+  </section>
+
+</BaseLayout>
+
+<style>
+/* HERO */
+#hero {
+  min-height: 100vh;
+  background-color: var(--yi-cream);
+  background-image: repeating-linear-gradient(
+    0deg,
+    transparent, transparent 47px,
+    rgba(217,206,184,0.55) 47px, rgba(217,206,184,0.55) 48px
+  );
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 120px 12vw;
+  overflow: hidden;
+}
+#hero::before {
+  content: '';
+  position: absolute;
+  left: 8vw; top: 0; bottom: 0;
+  width: 2px;
+  background: rgba(196,113,74,0.22);
+}
+#hero::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--yi-warm), transparent);
+  opacity: 0.25;
+}
+.hero-tag {
+  font-size: 13px;
+  color: var(--yi-sage);
+  letter-spacing: 0.28em;
+  font-weight: 300;
+  margin-bottom: 36px;
+  animation: fadeUp 1s 0.1s var(--yi-ease) both;
+}
+.hero-name {
+  font-family: var(--yi-font-kai);
+  font-size: clamp(100px, 15vw, 200px);
+  font-weight: 700;
+  color: var(--yi-brown);
+  line-height: 1;
+  letter-spacing: 0.04em;
+  animation: fadeUp 1s 0.2s var(--yi-ease) both;
+}
+.hero-channel {
+  font-family: var(--yi-font-kai);
+  font-size: clamp(24px, 3.5vw, 48px);
+  color: var(--yi-warm);
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  margin-top: 16px;
+  animation: fadeUp 1s 0.3s var(--yi-ease) both;
+}
+.hero-rule {
+  width: 120px; height: 2px;
+  background: var(--yi-warm);
+  opacity: 0.4;
+  margin: 32px 0;
+  animation: fadeUp 1s 0.4s var(--yi-ease) both;
+}
+.hero-quote {
+  font-family: var(--yi-font-display);
+  font-style: italic;
+  font-size: clamp(18px, 2.2vw, 28px);
+  color: var(--yi-dust);
+  letter-spacing: 0.08em;
+  max-width: 500px;
+  line-height: 1.6;
+  animation: fadeUp 1s 0.5s var(--yi-ease) both;
+}
+.hero-cta-group {
+  display: flex;
+  gap: 16px;
+  margin-top: 48px;
+  animation: fadeUp 1s 0.6s var(--yi-ease) both;
+}
+.hero-deco {
+  position: absolute;
+  right: 8vw;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--yi-font-display);
+  font-style: italic;
+  font-size: 200px;
+  color: var(--yi-warm);
+  opacity: 0.04;
+  letter-spacing: -0.05em;
+  user-select: none;
+  animation: fadeUp 1.2s 0.3s var(--yi-ease) both;
+  pointer-events: none;
+}
+
+/* POSTS */
+#posts {
+  padding: 100px 12vw;
+  background: var(--yi-paper);
+  border-top: 1px solid var(--yi-line);
+  border-bottom: 1px solid var(--yi-line);
+}
+.posts-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 48px;
+}
+.posts-heading {
+  font-family: var(--yi-font-kai);
+  font-size: clamp(24px, 2.5vw, 36px);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+.posts-all {
+  font-family: var(--yi-font-display);
+  font-style: italic;
+  font-size: 14px;
+  color: var(--yi-warm);
+  letter-spacing: 0.1em;
+  border-bottom: 1px solid rgba(140,100,56,0.3);
+  transition: color 0.2s;
+}
+.posts-all:hover { color: var(--yi-rust); }
+.posts-list { display: flex; flex-direction: column; }
+.post-item {
+  display: grid;
+  grid-template-columns: 60px 1fr 140px;
+  gap: 32px;
+  align-items: start;
+  padding: 32px 0;
+  border-bottom: 1px solid var(--yi-line);
+  text-decoration: none;
+  color: inherit;
+  transition: padding-left 0.25s;
+}
+.post-item:hover { padding-left: 12px; background: rgba(237,231,214,0.4); }
+.post-num {
+  font-family: var(--yi-font-display);
+  font-style: italic;
+  font-size: 28px;
+  color: var(--yi-line);
+  line-height: 1;
+  padding-top: 4px;
+}
+.post-body { display: flex; flex-direction: column; gap: 8px; }
+.post-category {
+  font-size: 11px;
+  color: var(--yi-sage);
+  letter-spacing: 0.22em;
+}
+.post-title {
+  font-family: var(--yi-font-kai);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--yi-brown);
+  letter-spacing: 0.05em;
+  line-height: 1.4;
+}
+.post-excerpt {
+  font-size: 14px;
+  color: var(--yi-dust);
+  line-height: 1.8;
+  letter-spacing: 0.03em;
+}
+.post-date {
+  font-size: 12px;
+  color: var(--yi-line);
+  letter-spacing: 0.1em;
+  text-align: right;
+  padding-top: 6px;
+}
+
+/* CATEGORIES */
+#categories {
+  padding: 100px 12vw;
+  background-color: var(--yi-cream);
+  background-image: repeating-linear-gradient(
+    0deg, transparent, transparent 47px,
+    rgba(217,206,184,0.4) 47px, rgba(217,206,184,0.4) 48px
+  );
+  position: relative;
+}
+#categories::before {
+  content: '';
+  position: absolute;
+  left: 8vw; top: 0; bottom: 0;
+  width: 1px;
+  background: rgba(196,113,74,0.15);
+}
+.categories-header { margin-bottom: 56px; }
+.cat-section-label {
+  font-family: var(--yi-font-display);
+  font-style: italic;
+  font-size: 12px;
+  color: var(--yi-sage);
+  letter-spacing: 0.28em;
+  margin-bottom: 12px;
+}
+.cat-heading {
+  font-family: var(--yi-font-kai);
+  font-size: clamp(28px, 3vw, 44px);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+.cat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+}
+.cat-card {
+  background: var(--yi-paper);
+  border: 1px solid var(--yi-line);
+  padding: 36px 28px;
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 0.3s, transform 0.3s;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+.cat-card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--yi-warm);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s var(--yi-ease);
+}
+.cat-card:hover {
+  box-shadow: 0 8px 32px rgba(61,43,26,0.1);
+  transform: translateY(-4px);
+}
+.cat-card:hover::after { transform: scaleX(1); }
+.cat-icon { font-size: 36px; display: block; margin-bottom: 16px; }
+.cat-title {
+  font-family: var(--yi-font-kai);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--yi-brown);
+  margin-bottom: 6px;
+  letter-spacing: 0.05em;
+}
+.cat-en {
+  font-family: var(--yi-font-display);
+  font-style: italic;
+  font-size: 12px;
+  color: var(--yi-warm);
+  letter-spacing: 0.16em;
+  margin-bottom: 14px;
+}
+.cat-desc {
+  font-size: 13px;
+  color: var(--yi-dust);
+  line-height: 1.9;
+  letter-spacing: 0.03em;
+}
+
+/* QUOTE */
+#quote {
+  padding: 100px 12vw;
+  background-color: var(--yi-brown);
+  text-align: center;
+}
+.quote-text {
+  font-family: var(--yi-font-kai);
+  font-size: clamp(24px, 3.5vw, 44px);
+  color: var(--yi-cream);
+  line-height: 1.7;
+  letter-spacing: 0.06em;
+  font-weight: 400;
+  max-width: 600px;
+  margin: 0 auto 28px;
+}
+.quote-em { color: var(--yi-warm); }
+.quote-rule {
+  width: 60px; height: 1px;
+  background: var(--yi-warm);
+  opacity: 0.5;
+  margin: 0 auto 20px;
+  border: none;
+}
+.quote-source {
+  font-family: var(--yi-font-display);
+  font-style: italic;
+  font-size: 15px;
+  color: var(--yi-dust);
+  letter-spacing: 0.12em;
+}
+
+@media (max-width: 900px) {
+  .cat-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+  #hero { padding: 100px 24px 80px; }
+  #posts, #categories, #quote { padding: 64px 24px; }
+  .hero-deco { display: none; }
+  .post-item { grid-template-columns: 48px 1fr; }
+  .post-date { display: none; }
+  .cat-grid { grid-template-columns: 1fr; }
+}
+</style>
