@@ -40,6 +40,7 @@ const currentPath = Astro.url.pathname;
   <ul class="nav-links">
     <li><a href="/" class={currentPath === '/' ? 'active' : ''}>首頁</a></li>
     <li><a href="/blog" class={currentPath.startsWith('/blog') ? 'active' : ''}>文章</a></li>
+    <li><a href="/lapian" class={currentPath.startsWith('/lapian') ? 'active' : ''}>拉片</a></li>
     <li><a href="/about" class={currentPath === '/about' ? 'active' : ''}>關於逸</a></li>
   </ul>
   <a class="nav-handle" href="https://www.instagram.com/yijintianyoufenxinliao" target="_blank" rel="noopener">@yijintianyoufenxinliao</a>

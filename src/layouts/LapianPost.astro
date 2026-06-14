@@ -1,0 +1,427 @@
+---
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  title: string;
+  film: string;
+  director: string;
+  year: number;
+  scene: string;
+  description: string;
+  date: Date;
+  tags: string[];
+  aspect: string[];
+}
+
+const { title, film, director, year, scene, description, date, tags, aspect } = Astro.props;
+
+const dateStr = date.toLocaleDateString('zh-TW', {
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+}).replace(/\//g, '.');
+---
+
+<BaseLayout title={`${title} — 拉片紀錄`} description={description}>
+  <article class="lapian-page">
+
+    <!-- 頂部 header：電影資訊 -->
+    <header class="lapian-header">
+      <div class="lapian-header-inner">
+
+        <a class="lapian-back" href="/lapian">← 所有拉片</a>
+
+        <div class="film-dossier">
+          <div class="film-dossier-label">FILM BREAKDOWN</div>
+          <div class="film-title-block">
+            <h1 class="film-name">{film}</h1>
+            <div class="film-meta-row">
+              <span class="film-director">{director}</span>
+              <span class="film-sep">·</span>
+              <span class="film-year">{year}</span>
+            </div>
+          </div>
+          <div class="scene-block">
+            <span class="scene-label">分析場景</span>
+            <span class="scene-value">{scene}</span>
+          </div>
+        </div>
+
+        <div class="lapian-title-block">
+          <h2 class="lapian-title">{title}</h2>
+          <p class="lapian-description">{description}</p>
+        </div>
+
+        <div class="lapian-footer-meta">
+          <div class="aspect-tags">
+            <span class="aspect-label">分析面向</span>
+            {aspect.map(a => <span class="aspect-tag">{a}</span>)}
+          </div>
+          <div class="lapian-date-tags">
+            <span class="lapian-date">{dateStr}</span>
+            {tags.map(t => <span class="lapian-tag">{t}</span>)}
+          </div>
+        </div>
+
+      </div>
+    </header>
+
+    <!-- 側邊時間軸裝飾 -->
+    <div class="lapian-body-wrap">
+      <div class="lapian-content">
+        <slot />
+      </div>
+    </div>
+
+    <div class="lapian-footer-nav">
+      <a class="btn-warm" href="/lapian">← 更多拉片紀錄</a>
+    </div>
+
+  </article>
+</BaseLayout>
+
+<style>
+.lapian-page {
+  padding-top: 80px;
+  min-height: 100vh;
+}
+
+/* Header */
+.lapian-header {
+  background-color: var(--yi-dark);
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent, transparent 47px,
+      rgba(255,255,255,0.02) 47px, rgba(255,255,255,0.02) 48px
+    );
+  padding: 80px 0 60px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.lapian-header::before {
+  content: '';
+  position: absolute;
+  left: calc(12vw - 24px);
+  top: 0; bottom: 0;
+  width: 1px;
+  background: rgba(196,113,74,0.25);
+}
+
+/* 膠卷孔裝飾 */
+.lapian-header::after {
+  content: '';
+  position: absolute;
+  right: 0; top: 0; bottom: 0;
+  width: 40px;
+  background-image: repeating-linear-gradient(
+    180deg,
+    transparent 0px, transparent 14px,
+    rgba(255,255,255,0.06) 14px, rgba(255,255,255,0.06) 26px
+  );
+}
+
+.lapian-header-inner {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 12vw;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.lapian-back {
+  display: inline-block;
+  font-size: 12px;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 0.14em;
+  transition: color 0.2s;
+}
+.lapian-back:hover { color: var(--yi-rust); }
+
+/* 電影資訊 dossier */
+.film-dossier {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.film-dossier-label {
+  font-family: var(--yi-font-display);
+  font-style: italic;
+  font-size: 11px;
+  color: var(--yi-rust);
+  letter-spacing: 0.32em;
+}
+
+.film-title-block {
+  display: flex;
+  align-items: baseline;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.film-name {
+  font-family: var(--yi-font-kai);
+  font-size: clamp(26px, 4vw, 40px);
+  font-weight: 700;
+  color: rgba(255,255,255,0.92);
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+}
+
+.film-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.film-director {
+  font-size: 14px;
+  color: var(--yi-dust);
+  letter-spacing: 0.08em;
+}
+
+.film-sep {
+  color: rgba(255,255,255,0.2);
+}
+
+.film-year {
+  font-family: var(--yi-font-display);
+  font-style: italic;
+  font-size: 14px;
+  color: var(--yi-dust);
+  letter-spacing: 0.08em;
+}
+
+.scene-block {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  background: rgba(196,113,74,0.12);
+  border-left: 2px solid var(--yi-rust);
+  border-radius: 0 2px 2px 0;
+}
+
+.scene-label {
+  font-size: 10px;
+  color: var(--yi-rust);
+  letter-spacing: 0.22em;
+  white-space: nowrap;
+}
+
+.scene-value {
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  color: rgba(255,255,255,0.7);
+  letter-spacing: 0.06em;
+}
+
+/* 拉片標題 */
+.lapian-title-block {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+.lapian-title {
+  font-family: var(--yi-font-kai);
+  font-size: clamp(22px, 3vw, 32px);
+  font-weight: 700;
+  color: rgba(255,255,255,0.85);
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+}
+
+.lapian-description {
+  font-size: 15px;
+  color: rgba(255,255,255,0.45);
+  line-height: 1.9;
+  letter-spacing: 0.04em;
+}
+
+/* 底部 meta */
+.lapian-footer-meta {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.aspect-tags {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.aspect-label {
+  font-size: 10px;
+  color: rgba(255,255,255,0.3);
+  letter-spacing: 0.2em;
+}
+
+.aspect-tag {
+  font-size: 11px;
+  color: var(--yi-rust);
+  border: 1px solid rgba(196,113,74,0.4);
+  padding: 3px 10px;
+  border-radius: 2px;
+  letter-spacing: 0.1em;
+}
+
+.lapian-date-tags {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.lapian-date {
+  font-family: var(--yi-font-display);
+  font-style: italic;
+  font-size: 12px;
+  color: rgba(255,255,255,0.25);
+  letter-spacing: 0.1em;
+}
+
+.lapian-tag {
+  font-size: 11px;
+  color: rgba(255,255,255,0.3);
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 3px 8px;
+  border-radius: 2px;
+  letter-spacing: 0.08em;
+}
+
+/* 正文 */
+.lapian-body-wrap {
+  background: var(--yi-paper);
+  border-bottom: 1px solid var(--yi-line);
+}
+
+.lapian-content {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 60px 12vw 80px;
+  font-size: 17px;
+  line-height: 2.1;
+  letter-spacing: 0.04em;
+  color: var(--yi-brown);
+}
+
+/* Markdown 內文樣式 */
+.lapian-content h2 {
+  font-family: var(--yi-font-kai);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--yi-brown);
+  letter-spacing: 0.05em;
+  margin: 56px 0 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--yi-line);
+}
+
+.lapian-content h3 {
+  font-family: 'Courier New', monospace;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--yi-rust);
+  letter-spacing: 0.16em;
+  margin: 40px 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.lapian-content h3::before {
+  content: '';
+  display: inline-block;
+  width: 24px;
+  height: 1px;
+  background: var(--yi-rust);
+  opacity: 0.5;
+}
+
+.lapian-content p { margin-bottom: 24px; }
+
+.lapian-content strong {
+  font-weight: 500;
+  color: var(--yi-brown);
+}
+
+.lapian-content em {
+  font-family: var(--yi-font-display);
+  font-style: italic;
+  color: var(--yi-rust);
+}
+
+.lapian-content a {
+  color: var(--yi-warm);
+  border-bottom: 1px solid rgba(140,100,56,0.3);
+  transition: border-color 0.2s;
+}
+.lapian-content a:hover { border-color: var(--yi-warm); }
+
+.lapian-content blockquote {
+  border-left: 3px solid var(--yi-rust);
+  background: rgba(196,113,74,0.06);
+  padding: 16px 20px;
+  margin: 28px 0;
+  font-family: var(--yi-font-kai);
+  font-size: 17px;
+  line-height: 1.8;
+  letter-spacing: 0.04em;
+  color: var(--yi-brown);
+  border-radius: 0 4px 4px 0;
+}
+
+.lapian-content ul, .lapian-content ol {
+  padding-left: 1.6em;
+  margin-bottom: 24px;
+}
+.lapian-content li { margin-bottom: 8px; }
+
+.lapian-content hr {
+  border: none;
+  border-top: 1px solid var(--yi-line);
+  margin: 48px 0;
+}
+
+.lapian-content code {
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  background: rgba(61,43,26,0.06);
+  padding: 2px 6px;
+  border-radius: 2px;
+  color: var(--yi-rust);
+}
+
+.lapian-footer-nav {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 48px 12vw;
+}
+
+@media (max-width: 768px) {
+  .lapian-header-inner,
+  .lapian-content,
+  .lapian-footer-nav {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+  .lapian-footer-meta {
+    flex-direction: column;
+  }
+  .film-title-block {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+</style>

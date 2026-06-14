@@ -1,0 +1,29 @@
+---
+import LapianPost from '../../layouts/LapianPost.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('lapian', ({ data }) => !data.draft);
+  return posts.map(post => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+---
+
+<LapianPost
+  title={post.data.title}
+  film={post.data.film}
+  director={post.data.director}
+  year={post.data.year}
+  scene={post.data.scene}
+  description={post.data.description}
+  date={post.data.date}
+  tags={post.data.tags}
+  aspect={post.data.aspect}
+>
+  <Content />
+</LapianPost>
