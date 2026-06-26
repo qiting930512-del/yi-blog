@@ -99,6 +99,55 @@ const categoryEn: Record<string, string> = {
     </div>
   </section>
 
+  <!-- LEARNING -->
+  <section id="learning">
+    <div class="learning-header reveal">
+      <div class="learning-label">Learning Log</div>
+      <div class="learning-heading">我在學什麼</div>
+      <div class="learning-sub">正在摸索的 AI 工具——用來讓創作更有效率的那些東西。</div>
+    </div>
+    <div class="learning-grid">
+
+      <div class="learn-card reveal">
+        <div class="learn-num">01</div>
+        <div class="learn-icon">🤖</div>
+        <div class="learn-title">Claude Code</div>
+        <div class="learn-en">AI Coding Agent</div>
+        <div class="learn-desc">用自然語言操控程式碼的 AI 工具。這個部落格就是用 Claude Code 一起蓋出來的。</div>
+        <div class="learn-links">
+          <a class="learn-link" href="https://youtu.be/xo7dE80ktu4" target="_blank" rel="noopener">▶ 教學影片 01</a>
+          <a class="learn-link" href="https://youtu.be/80kCvbsuniw" target="_blank" rel="noopener">▶ 教學影片 02</a>
+          <a class="learn-link learn-link--main" href="https://cc.lifehacker.tw/" target="_blank" rel="noopener">完整教材 →</a>
+        </div>
+      </div>
+
+      <div class="learn-card reveal">
+        <div class="learn-num">02</div>
+        <div class="learn-icon">📋</div>
+        <div class="learn-title">Notion</div>
+        <div class="learn-en">Knowledge OS</div>
+        <div class="learn-desc">我用 PAI 系統管理個人知識庫、創作流程和學習紀錄。不再掉進分類收藏的陷阱。</div>
+        <div class="learn-links">
+          <a class="learn-link" href="https://youtu.be/FugPDPp1OrA" target="_blank" rel="noopener">▶ 教學影片</a>
+          <a class="learn-link learn-link--main" href="https://raymondhouch.com/notion/para-pai/" target="_blank" rel="noopener">PAI vs PARA →</a>
+        </div>
+      </div>
+
+      <div class="learn-card reveal">
+        <div class="learn-num">03</div>
+        <div class="learn-icon">🦾</div>
+        <div class="learn-title">Manus</div>
+        <div class="learn-en">AI Agent</div>
+        <div class="learn-desc">能自動完成複雜任務的 AI Agent——從研究、整理到輸出，一氣呵成。</div>
+        <div class="learn-links">
+          <a class="learn-link" href="https://youtu.be/jQvHumkxPAM" target="_blank" rel="noopener">▶ 教學影片</a>
+          <a class="learn-link learn-link--main" href="https://raymondhouch.notion.site/manus-ai-15" target="_blank" rel="noopener">完整教材 →</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
   <!-- QUOTE -->
   <section id="quote">
     <div class="quote-text reveal">
@@ -372,6 +421,114 @@ const categoryEn: Record<string, string> = {
   color: var(--yi-dust);
   line-height: 1.9;
   letter-spacing: 0.03em;
+}
+
+/* LEARNING */
+#learning {
+  padding: 100px 12vw;
+  background: var(--yi-paper);
+  border-top: 1px solid var(--yi-line);
+  border-bottom: 1px solid var(--yi-line);
+}
+.learning-header { margin-bottom: 56px; }
+.learning-label {
+  font-family: var(--yi-font-display);
+  font-style: italic;
+  font-size: 12px;
+  color: var(--yi-sage);
+  letter-spacing: 0.28em;
+  margin-bottom: 12px;
+}
+.learning-heading {
+  font-family: var(--yi-font-kai);
+  font-size: clamp(28px, 3vw, 44px);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  margin-bottom: 12px;
+}
+.learning-sub {
+  font-size: 14px;
+  color: var(--yi-dust);
+  letter-spacing: 0.05em;
+  line-height: 1.8;
+}
+.learning-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.learn-card {
+  border: 1px solid var(--yi-line);
+  padding: 36px 28px 28px;
+  position: relative;
+  background: var(--yi-cream);
+  transition: box-shadow 0.3s, transform 0.3s;
+}
+.learn-card:hover {
+  box-shadow: 0 8px 32px rgba(61,43,26,0.08);
+  transform: translateY(-3px);
+}
+.learn-num {
+  position: absolute;
+  top: 24px; right: 24px;
+  font-family: var(--yi-font-display);
+  font-style: italic;
+  font-size: 32px;
+  color: var(--yi-line);
+  line-height: 1;
+}
+.learn-icon { font-size: 36px; margin-bottom: 16px; }
+.learn-title {
+  font-family: var(--yi-font-kai);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--yi-brown);
+  letter-spacing: 0.04em;
+  margin-bottom: 4px;
+}
+.learn-en {
+  font-family: var(--yi-font-display);
+  font-style: italic;
+  font-size: 12px;
+  color: var(--yi-warm);
+  letter-spacing: 0.16em;
+  margin-bottom: 14px;
+}
+.learn-desc {
+  font-size: 13px;
+  color: var(--yi-dust);
+  line-height: 1.9;
+  letter-spacing: 0.03em;
+  margin-bottom: 20px;
+}
+.learn-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.learn-link {
+  font-size: 12px;
+  color: var(--yi-sage);
+  border: 1px solid var(--yi-line);
+  padding: 4px 10px;
+  border-radius: 2px;
+  text-decoration: none;
+  letter-spacing: 0.06em;
+  transition: color 0.2s, border-color 0.2s;
+}
+.learn-link:hover { color: var(--yi-warm); border-color: var(--yi-warm); }
+.learn-link--main {
+  color: var(--yi-warm);
+  border-color: var(--yi-warm);
+  font-weight: 500;
+}
+.learn-link--main:hover { color: var(--yi-rust); border-color: var(--yi-rust); }
+
+@media (max-width: 900px) {
+  .learning-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 768px) {
+  #learning { padding: 64px 24px; }
 }
 
 /* QUOTE */
