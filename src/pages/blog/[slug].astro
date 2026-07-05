@@ -4,14 +4,22 @@ import { getCollection } from 'astro:content';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog', ({ data }) => !data.draft);
-  return posts.map(post => ({
+  const sorted = posts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+  return sorted.map((post, i) => ({
     params: { slug: post.slug },
-    props: { post },
+    props: {
+      post,
+      prevPost: sorted[i + 1] ?? null,
+      nextPost: sorted[i - 1] ?? null,
+    },
   }));
 }
 
-const { post } = Astro.props;
+const { post, prevPost, nextPost } = Astro.props;
 const { Content } = await post.render();
+
+const wordCount = post.body.replace(/\s+/g, '').length;
+const readingMinutes = Math.max(1, Math.ceil(wordCount / 300));
 ---
 
 <BlogPost
@@ -20,6 +28,9 @@ const { Content } = await post.render();
   date={post.data.date}
   category={post.data.category}
   tags={post.data.tags}
+  readingMinutes={readingMinutes}
+  prevPost={prevPost ? { slug: prevPost.slug, title: prevPost.data.title } : null}
+  nextPost={nextPost ? { slug: nextPost.slug, title: nextPost.data.title } : null}
 >
   <Content />
 </BlogPost>

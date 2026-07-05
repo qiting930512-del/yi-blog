@@ -7,9 +7,12 @@ interface Props {
   date: Date;
   category: string;
   tags: string[];
+  readingMinutes?: number;
+  prevPost?: { slug: string; title: string } | null;
+  nextPost?: { slug: string; title: string } | null;
 }
 
-const { title, description, date, category, tags } = Astro.props;
+const { title, description, date, category, tags, readingMinutes, prevPost, nextPost } = Astro.props;
 
 const dateStr = date.toLocaleDateString('zh-TW', {
   year: 'numeric',
@@ -36,6 +39,7 @@ const catColor = categoryColors[category] ?? '#8C6438';
         <div class="post-meta">
           <span class="post-cat" style={`color: ${catColor}; border-color: ${catColor}40`}>{category}</span>
           <span class="post-date">{dateStr}</span>
+          {readingMinutes && <span class="post-reading">約 {readingMinutes} 分鐘</span>}
         </div>
         <h1 class="post-title">{title}</h1>
         <p class="post-description">{description}</p>
@@ -56,7 +60,21 @@ const catColor = categoryColors[category] ?? '#8C6438';
 
     <!-- 底部 -->
     <div class="post-footer-nav">
-      <a class="btn-warm" href="/blog">← 更多文章</a>
+      <a class="btn-outline" href="/blog">← 更多文章</a>
+      <div class="post-nav-posts">
+        {prevPost && (
+          <a class="post-nav-item post-nav-prev" href={`/blog/${prevPost.slug}`}>
+            <span class="post-nav-dir">← 上一篇</span>
+            <span class="post-nav-title">{prevPost.title}</span>
+          </a>
+        )}
+        {nextPost && (
+          <a class="post-nav-item post-nav-next" href={`/blog/${nextPost.slug}`}>
+            <span class="post-nav-dir">下一篇 →</span>
+            <span class="post-nav-title">{nextPost.title}</span>
+          </a>
+        )}
+      </div>
     </div>
 
   </article>
@@ -241,10 +259,55 @@ const catColor = categoryColors[category] ?? '#8C6438';
   border-radius: 2px;
 }
 
+.post-reading {
+  font-family: var(--yi-font-display);
+  font-style: italic;
+  font-size: 12px;
+  color: var(--yi-dust);
+  letter-spacing: 0.1em;
+}
+
 .post-footer-nav {
   max-width: 760px;
   margin: 0 auto;
   padding: 48px 12vw;
+}
+.post-nav-posts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 32px;
+  padding-top: 32px;
+  border-top: 1px solid var(--yi-line);
+}
+.post-nav-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-decoration: none;
+  color: inherit;
+  padding: 16px;
+  border: 1px solid var(--yi-line);
+  transition: border-color 0.2s, background 0.2s;
+}
+.post-nav-item:hover {
+  border-color: var(--yi-warm);
+  background: rgba(196,113,74,0.04);
+}
+.post-nav-next { text-align: right; grid-column: 2; }
+.post-nav-prev:only-child { grid-column: 1; }
+.post-nav-next:only-child { grid-column: 2; }
+.post-nav-dir {
+  font-size: 11px;
+  color: var(--yi-warm);
+  letter-spacing: 0.16em;
+}
+.post-nav-title {
+  font-family: var(--yi-font-kai);
+  font-size: 15px;
+  color: var(--yi-brown);
+  letter-spacing: 0.04em;
+  line-height: 1.5;
 }
 
 @media (max-width: 768px) {
