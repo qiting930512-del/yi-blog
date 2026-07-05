@@ -1,0 +1,544 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="舞台劇 — 逸今天又分心了"
+  description="逸正在開發中的舞台劇創作，以及劇本格式範例。"
+>
+
+  <div class="plays-page">
+
+    <!-- HEADER -->
+    <header class="plays-header">
+      <div class="plays-header-inner">
+        <div class="plays-label">Stage Play</div>
+        <h1 class="plays-heading">舞台劇</h1>
+        <p class="plays-sub">
+          這裡放的是正在開發中的劇本，以及一些格式範例。<br>
+          目前進行中：《亞洲，生活》。
+        </p>
+      </div>
+    </header>
+
+    <!-- SCRIPT SECTION -->
+    <div class="plays-body">
+
+      <div class="script-meta reveal">
+        <div class="script-label">Format Example · 格式範例</div>
+        <h2 class="script-title">《深夜，便利商店》</h2>
+        <div class="script-info-grid">
+          <div class="script-info-item">
+            <span class="info-key">類型</span>
+            <span class="info-val">獨幕劇 · 現實主義</span>
+          </div>
+          <div class="script-info-item">
+            <span class="info-key">場次</span>
+            <span class="info-val">一場，約十五分鐘</span>
+          </div>
+          <div class="script-info-item">
+            <span class="info-key">人物</span>
+            <span class="info-val">二人</span>
+          </div>
+        </div>
+      </div>
+
+      <hr class="yi-rule" />
+
+      <!-- CHARACTERS -->
+      <div class="dramatis reveal">
+        <div class="dramatis-label">Dramatis Personae · 登場人物</div>
+        <div class="dramatis-list">
+          <div class="dramatis-item">
+            <span class="char-name">陳念</span>
+            <span class="char-desc">男，二十八歲。剛在今天早上辭了工作，還沒告訴任何人。</span>
+          </div>
+          <div class="dramatis-item">
+            <span class="char-name">許晴</span>
+            <span class="char-desc">女，二十八歲。明天就要飛去柏林，單程票。</span>
+          </div>
+        </div>
+      </div>
+
+      <hr class="yi-rule" />
+
+      <!-- SETTING -->
+      <div class="setting reveal">
+        <div class="setting-label">Setting · 舞台設定</div>
+        <p class="setting-text">
+          台北，某個深夜三點的24小時便利商店。螢光燈，冷氣，架上的東西排列整齊。
+          舞台空間極簡：一張高腳椅，一個微波爐的嗡嗡聲，兩個人。
+          窗外的城市是背景，但不必可見。
+        </p>
+      </div>
+
+      <hr class="yi-rule" />
+
+      <!-- SCRIPT -->
+      <div class="script reveal">
+
+        <div class="scene-heading">第一場　便利商店內　深夜</div>
+
+        <div class="stage-dir">
+          燈起。螢光燈管，過亮。<br>
+          <strong>陳念</strong>站在貨架前，盯著一排即食麵。他已經站了很久了，但沒有拿任何一包。<br>
+          門的感應聲。<strong>許晴</strong>走進來，拉著一個行李箱，停在門口看了看四周，然後看到他。
+        </div>
+
+        <div class="dialogue-block">
+          <div class="char-cue">許晴</div>
+          <div class="line">（低聲，像是在確認自己沒看錯）<br>陳念？</div>
+        </div>
+
+        <div class="dialogue-block">
+          <div class="char-cue">陳念</div>
+          <div class="line">（轉過頭）<br>……許晴。</div>
+        </div>
+
+        <div class="stage-dir">
+          兩個人看著對方。一拍。
+        </div>
+
+        <div class="dialogue-block">
+          <div class="char-cue">許晴</div>
+          <div class="line">你在這裡幹嘛？</div>
+        </div>
+
+        <div class="dialogue-block">
+          <div class="char-cue">陳念</div>
+          <div class="line">買東西。</div>
+        </div>
+
+        <div class="dialogue-block">
+          <div class="char-cue">許晴</div>
+          <div class="line">你已經站在那邊十分鐘了。我在外面等計程車看到你的。</div>
+        </div>
+
+        <div class="dialogue-block">
+          <div class="char-cue">陳念</div>
+          <div class="line">（停頓）<br>在挑口味。</div>
+        </div>
+
+        <div class="stage-dir">
+          許晴把行李箱停在旁邊，走過來站在他旁邊，看著那排即食麵。
+        </div>
+
+        <div class="dialogue-block">
+          <div class="char-cue">許晴</div>
+          <div class="line">你不吃辣的。</div>
+        </div>
+
+        <div class="dialogue-block">
+          <div class="char-cue">陳念</div>
+          <div class="line">我知道。</div>
+        </div>
+
+        <div class="dialogue-block">
+          <div class="char-cue">許晴</div>
+          <div class="line">那你看那個幹嘛。</div>
+        </div>
+
+        <div class="stage-dir">
+          陳念沒有回答。拿起了一包非辣口味，看了看，放回去。
+        </div>
+
+        <div class="dialogue-block">
+          <div class="char-cue">陳念</div>
+          <div class="line">你那個行李箱……你要去哪？</div>
+        </div>
+
+        <div class="dialogue-block">
+          <div class="char-cue">許晴</div>
+          <div class="line">（短暫停頓）<br>柏林。</div>
+        </div>
+
+        <div class="dialogue-block">
+          <div class="char-cue">陳念</div>
+          <div class="line">出差？</div>
+        </div>
+
+        <div class="dialogue-block">
+          <div class="char-cue">許晴</div>
+          <div class="line">搬過去。</div>
+        </div>
+
+        <div class="stage-dir">
+          陳念轉頭看她。
+        </div>
+
+        <div class="dialogue-block">
+          <div class="char-cue">陳念</div>
+          <div class="line">什麼時候決定的？</div>
+        </div>
+
+        <div class="dialogue-block">
+          <div class="char-cue">許晴</div>
+          <div class="line">很久了。</div>
+        </div>
+
+        <div class="dialogue-block">
+          <div class="char-cue">陳念</div>
+          <div class="line">你沒跟我說過。</div>
+        </div>
+
+        <div class="dialogue-block">
+          <div class="char-cue">許晴</div>
+          <div class="line">你也沒問過我最近怎麼樣。</div>
+        </div>
+
+        <div class="stage-dir">
+          沉默。微波爐在角落嗡嗡作響。
+        </div>
+
+        <div class="dialogue-block">
+          <div class="char-cue">陳念</div>
+          <div class="line">我今天辭職了。</div>
+        </div>
+
+        <div class="dialogue-block">
+          <div class="char-cue">許晴</div>
+          <div class="line">（停頓）<br>什麼？</div>
+        </div>
+
+        <div class="dialogue-block">
+          <div class="char-cue">陳念</div>
+          <div class="line">早上九點。發了信。然後就走了。<br>你是第一個知道的人。</div>
+        </div>
+
+        <div class="stage-dir">
+          許晴看著他。
+        </div>
+
+        <div class="dialogue-block">
+          <div class="char-cue">許晴</div>
+          <div class="line">你還好嗎？</div>
+        </div>
+
+        <div class="dialogue-block">
+          <div class="char-cue">陳念</div>
+          <div class="line">不知道。<br>（停）<br>你呢，你還好嗎？</div>
+        </div>
+
+        <div class="dialogue-block">
+          <div class="char-cue">許晴</div>
+          <div class="line">（想了一下）<br>我也不知道。但我訂的是單程票，所以應該還算確定。</div>
+        </div>
+
+        <div class="stage-dir">
+          兩個人對視。然後陳念輕輕笑了，許晴也笑了，那種笑帶著一點什麼說不清楚的東西。
+        </div>
+
+        <div class="dialogue-block">
+          <div class="char-cue">陳念</div>
+          <div class="line">你幾點的班機？</div>
+        </div>
+
+        <div class="dialogue-block">
+          <div class="char-cue">許晴</div>
+          <div class="line">早上七點半。我本來想說在家等，但是睡不著就出來了。</div>
+        </div>
+
+        <div class="dialogue-block">
+          <div class="char-cue">陳念</div>
+          <div class="line">我陪你等。</div>
+        </div>
+
+        <div class="stage-dir">
+          許晴沒有說話，但她沒有說不用。<br>
+          陳念拿了兩包即食麵——非辣的——走向微波爐。<br>
+          燈緩緩縮小，只剩兩個人和那一道螢光燈管的白光。
+        </div>
+
+        <div class="scene-end">— 全劇終 —</div>
+
+      </div><!-- /.script -->
+
+      <hr class="yi-rule" />
+
+      <!-- FORMAT NOTE -->
+      <div class="format-note reveal">
+        <div class="format-note-label">Format Note · 格式說明</div>
+        <div class="format-grid">
+          <div class="format-item">
+            <div class="format-key">場景標題</div>
+            <div class="format-val">每換地點或時間就開新場，標明內／外景與時間。</div>
+          </div>
+          <div class="format-item">
+            <div class="format-key">舞台指示</div>
+            <div class="format-val">斜體或縮排，描述動作、燈光、音效，不寫心理狀態。</div>
+          </div>
+          <div class="format-item">
+            <div class="format-key">角色名稱</div>
+            <div class="format-val">對白前獨立一行，加粗或全大寫，置中或靠左均可。</div>
+          </div>
+          <div class="format-item">
+            <div class="format-key">括號備注</div>
+            <div class="format-val">表演提示，只在必要時加，避免過度說明演員的表情。</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /.plays-body -->
+  </div>
+
+</BaseLayout>
+
+<style>
+.plays-page { padding-top: 80px; }
+
+/* HEADER */
+.plays-header {
+  background-color: var(--yi-paper);
+  background-image: repeating-linear-gradient(
+    0deg,
+    transparent, transparent 47px,
+    rgba(217,206,184,0.45) 47px, rgba(217,206,184,0.45) 48px
+  );
+  padding: 80px 0 56px;
+  border-bottom: 1px solid var(--yi-line);
+  position: relative;
+}
+.plays-header::before {
+  content: '';
+  position: absolute;
+  left: calc(12vw - 24px);
+  top: 0; bottom: 0;
+  width: 1px;
+  background: rgba(196,113,74,0.15);
+}
+.plays-header-inner { padding: 0 12vw; }
+.plays-label {
+  font-family: var(--yi-font-display);
+  font-style: italic;
+  font-size: 12px;
+  color: var(--yi-sage);
+  letter-spacing: 0.28em;
+  margin-bottom: 12px;
+}
+.plays-heading {
+  font-family: var(--yi-font-kai);
+  font-size: clamp(40px, 6vw, 80px);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--yi-brown);
+  line-height: 1;
+  margin-bottom: 20px;
+}
+.plays-sub {
+  font-size: 15px;
+  color: var(--yi-dust);
+  line-height: 2;
+  letter-spacing: 0.04em;
+  max-width: 480px;
+}
+
+/* BODY */
+.plays-body {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 64px 12vw 100px;
+}
+
+.yi-rule {
+  border: none;
+  border-top: 1px solid var(--yi-line);
+  margin: 48px 0;
+}
+
+/* SCRIPT META */
+.script-label {
+  font-family: var(--yi-font-display);
+  font-style: italic;
+  font-size: 11px;
+  color: var(--yi-sage);
+  letter-spacing: 0.28em;
+  margin-bottom: 12px;
+}
+.script-title {
+  font-family: var(--yi-font-kai);
+  font-size: clamp(28px, 4vw, 44px);
+  font-weight: 700;
+  color: var(--yi-brown);
+  letter-spacing: 0.06em;
+  margin-bottom: 28px;
+}
+.script-info-grid {
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+.script-info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.info-key {
+  font-size: 11px;
+  color: var(--yi-rust);
+  letter-spacing: 0.22em;
+}
+.info-val {
+  font-family: var(--yi-font-kai);
+  font-size: 16px;
+  color: var(--yi-brown);
+  letter-spacing: 0.04em;
+}
+
+/* DRAMATIS PERSONAE */
+.dramatis-label {
+  font-family: var(--yi-font-display);
+  font-style: italic;
+  font-size: 11px;
+  color: var(--yi-sage);
+  letter-spacing: 0.28em;
+  margin-bottom: 20px;
+}
+.dramatis-list { display: flex; flex-direction: column; gap: 0; }
+.dramatis-item {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 24px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--yi-line);
+  align-items: baseline;
+}
+.char-name {
+  font-family: var(--yi-font-kai);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--yi-brown);
+  letter-spacing: 0.06em;
+}
+.char-desc {
+  font-size: 14px;
+  color: var(--yi-dust);
+  line-height: 1.9;
+  letter-spacing: 0.03em;
+}
+
+/* SETTING */
+.setting-label {
+  font-family: var(--yi-font-display);
+  font-style: italic;
+  font-size: 11px;
+  color: var(--yi-sage);
+  letter-spacing: 0.28em;
+  margin-bottom: 16px;
+}
+.setting-text {
+  font-size: 15px;
+  color: var(--yi-dust);
+  line-height: 2;
+  letter-spacing: 0.04em;
+}
+
+/* SCRIPT */
+.script {
+  font-family: var(--yi-font-kai);
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.scene-heading {
+  font-size: 13px;
+  letter-spacing: 0.22em;
+  color: var(--yi-rust);
+  border-left: 2px solid var(--yi-rust);
+  padding-left: 12px;
+  margin-bottom: 32px;
+  line-height: 1.8;
+}
+.stage-dir {
+  font-size: 14px;
+  color: var(--yi-dust);
+  font-style: italic;
+  line-height: 2.2;
+  letter-spacing: 0.04em;
+  padding: 16px 0 16px 20px;
+  border-left: 1px solid var(--yi-line);
+  margin: 8px 0;
+}
+.dialogue-block {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 16px;
+  padding: 10px 0;
+  align-items: start;
+}
+.char-cue {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--yi-brown);
+  letter-spacing: 0.12em;
+  text-transform: none;
+  padding-top: 2px;
+  text-align: right;
+  padding-right: 16px;
+  border-right: 1px solid var(--yi-line);
+}
+.line {
+  font-size: 16px;
+  color: var(--yi-brown);
+  line-height: 2;
+  letter-spacing: 0.04em;
+  padding-left: 4px;
+}
+.line em, .line i {
+  color: var(--yi-dust);
+  font-size: 14px;
+}
+.scene-end {
+  text-align: center;
+  font-family: var(--yi-font-display);
+  font-style: italic;
+  font-size: 14px;
+  color: var(--yi-warm);
+  letter-spacing: 0.16em;
+  margin-top: 40px;
+  padding-top: 32px;
+  border-top: 1px solid var(--yi-line);
+}
+
+/* FORMAT NOTE */
+.format-note-label {
+  font-family: var(--yi-font-display);
+  font-style: italic;
+  font-size: 11px;
+  color: var(--yi-sage);
+  letter-spacing: 0.28em;
+  margin-bottom: 24px;
+}
+.format-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2px;
+}
+.format-item {
+  background: var(--yi-paper);
+  border: 1px solid var(--yi-line);
+  padding: 24px 20px;
+}
+.format-key {
+  font-family: var(--yi-font-kai);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--yi-brown);
+  letter-spacing: 0.06em;
+  margin-bottom: 8px;
+}
+.format-val {
+  font-size: 13px;
+  color: var(--yi-dust);
+  line-height: 1.9;
+  letter-spacing: 0.03em;
+}
+
+@media (max-width: 768px) {
+  .plays-header-inner, .plays-body { padding-left: 24px; padding-right: 24px; }
+  .script-info-grid { gap: 20px; }
+  .dialogue-block { grid-template-columns: 60px 1fr; }
+  .char-cue { font-size: 12px; }
+  .format-grid { grid-template-columns: 1fr; }
+  .dramatis-item { grid-template-columns: 60px 1fr; gap: 16px; }
+}
+</style>
