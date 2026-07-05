@@ -1,0 +1,287 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('lapian', ({ data }) => !data.draft);
+const sorted = allPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+function formatDate(date: Date) {
+  return date.toLocaleDateString('zh-TW', { year: 'numeric', month: '2-digit', day: '2-digit' })
+    .replace(/\//g, '.');
+}
+---
+
+<BaseLayout title="拉片紀錄 — 逸今天又分心了" description="逐場景分析電影的鏡頭語言、攝影機運動與敘事技法。">
+
+  <div class="lapian-index">
+
+    <!-- Header -->
+    <header class="li-header">
+      <div class="li-header-inner">
+        <div class="li-strip">
+          {Array.from({ length: 12 }).map(() => <span class="strip-hole" />)}
+        </div>
+        <div class="li-label">Film Breakdown</div>
+        <h1 class="li-heading">拉片</h1>
+        <p class="li-sub">逐鏡分析，寫給自己的影像筆記。共 {sorted.length} 篇。</p>
+        <p class="li-desc">「拉片」是電影人的基本功——把電影慢下來，看清楚每個選擇的意圖。</p>
+      </div>
+    </header>
+
+    <!-- List -->
+    <div class="li-body">
+      {sorted.length === 0 ? (
+        <div class="li-empty">
+          <p>拉片中，請稍候。</p>
+        </div>
+      ) : (
+        <div class="li-list">
+          {sorted.map((post, i) => (
+            <a class="li-item" href={`/lapian/${post.slug}`}>
+              <div class="li-num">{String(i + 1).padStart(2, '0')}</div>
+              <div class="li-main">
+                <div class="li-film-row">
+                  <span class="li-film-name">{post.data.film}</span>
+                  <span class="li-film-year">{post.data.year}</span>
+                </div>
+                <div class="li-title">{post.data.title}</div>
+                <div class="li-scene">{post.data.scene}</div>
+                <div class="li-excerpt">{post.data.description}</div>
+                <div class="li-bottom">
+                  <div class="li-aspects">
+                    {post.data.aspect.slice(0, 4).map(a => (
+                      <span class="li-aspect">{a}</span>
+                    ))}
+                  </div>
+                  <span class="li-date">{formatDate(post.data.date)}</span>
+                </div>
+              </div>
+            </a>
+          ))}
+        </div>
+      )}
+    </div>
+
+  </div>
+
+</BaseLayout>
+
+<style>
+.lapian-index { padding-top: 80px; }
+
+/* Header */
+.li-header {
+  background: var(--yi-dark);
+  padding: 80px 0 60px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  position: relative;
+  overflow: hidden;
+}
+
+.li-header::after {
+  content: '';
+  position: absolute;
+  right: 0; top: 0; bottom: 0;
+  width: 48px;
+  background-image: repeating-linear-gradient(
+    180deg,
+    transparent 0px, transparent 14px,
+    rgba(255,255,255,0.05) 14px, rgba(255,255,255,0.05) 26px
+  );
+}
+
+.li-header-inner {
+  padding: 0 12vw;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* 膠卷孔列 */
+.li-strip {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 8px;
+}
+.strip-hole {
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.04);
+}
+
+.li-label {
+  font-family: var(--yi-font-display);
+  font-style: italic;
+  font-size: 11px;
+  color: var(--yi-rust);
+  letter-spacing: 0.32em;
+}
+
+.li-heading {
+  font-family: var(--yi-font-kai);
+  font-size: clamp(48px, 7vw, 88px);
+  font-weight: 700;
+  color: rgba(255,255,255,0.88);
+  letter-spacing: 0.04em;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.li-sub {
+  font-size: 14px;
+  color: rgba(255,255,255,0.35);
+  letter-spacing: 0.1em;
+}
+
+.li-desc {
+  font-family: var(--yi-font-kai);
+  font-size: 16px;
+  color: rgba(255,255,255,0.5);
+  letter-spacing: 0.06em;
+  line-height: 1.8;
+  max-width: 560px;
+  border-left: 2px solid rgba(196,113,74,0.4);
+  padding-left: 16px;
+}
+
+/* Body */
+.li-body {
+  padding: 56px 12vw 100px;
+  background: var(--yi-paper);
+}
+
+.li-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.li-item {
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  gap: 28px;
+  align-items: start;
+  padding: 36px 0;
+  border-bottom: 1px solid var(--yi-line);
+  text-decoration: none;
+  color: inherit;
+  transition: padding-left 0.25s, background 0.25s;
+}
+.li-item:hover {
+  padding-left: 8px;
+  background: rgba(196,113,74,0.04);
+}
+
+.li-num {
+  font-family: var(--yi-font-display);
+  font-style: italic;
+  font-size: 24px;
+  color: var(--yi-line);
+  line-height: 1;
+  padding-top: 6px;
+}
+
+.li-main {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.li-film-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.li-film-name {
+  font-size: 12px;
+  color: var(--yi-rust);
+  letter-spacing: 0.18em;
+  font-weight: 500;
+}
+
+.li-film-year {
+  font-family: var(--yi-font-display);
+  font-style: italic;
+  font-size: 12px;
+  color: var(--yi-dust);
+  letter-spacing: 0.1em;
+}
+
+.li-title {
+  font-family: var(--yi-font-kai);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--yi-brown);
+  letter-spacing: 0.05em;
+  line-height: 1.4;
+}
+
+.li-scene {
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  color: var(--yi-dust);
+  letter-spacing: 0.08em;
+}
+
+.li-excerpt {
+  font-size: 14px;
+  color: var(--yi-dust);
+  line-height: 1.8;
+  letter-spacing: 0.03em;
+}
+
+.li-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.li-aspects {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.li-aspect {
+  font-size: 11px;
+  color: var(--yi-rust);
+  border: 1px solid rgba(196,113,74,0.3);
+  padding: 2px 8px;
+  border-radius: 2px;
+  letter-spacing: 0.08em;
+}
+
+.li-date {
+  font-family: var(--yi-font-display);
+  font-style: italic;
+  font-size: 12px;
+  color: var(--yi-dust);
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+}
+
+.li-empty {
+  padding: 100px 0;
+  text-align: center;
+  font-family: var(--yi-font-kai);
+  font-size: 18px;
+  color: var(--yi-dust);
+  letter-spacing: 0.08em;
+}
+
+@media (max-width: 768px) {
+  .li-header-inner, .li-body {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+  .li-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+</style>

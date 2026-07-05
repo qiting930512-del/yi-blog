@@ -12,4 +12,20 @@ const blog = defineCollection({
   }),
 });
 
-export const collections = { blog };
+const lapian = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    film: z.string(),
+    director: z.string(),
+    year: z.number(),
+    scene: z.string(),
+    description: z.string(),
+    date: z.coerce.date(),
+    tags: z.array(z.string()).default([]),
+    aspect: z.array(z.string()).default([]),
+    draft: z.boolean().default(false),
+  }),
+});
+
+export const collections = { blog, lapian };
