@@ -1,0 +1,28 @@
+name: 週報自動生成
+
+on:
+  schedule:
+    # 每週五 09:07 台灣時間 (UTC+8) = UTC 01:07
+    - cron: '7 1 * * 5'
+  workflow_dispatch: # 允許手動觸發
+
+jobs:
+  generate-report:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Generate Weekly Report
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_ACTIONS_DB_ID: ${{ secrets.NOTION_ACTIONS_DB_ID }}
+          NOTION_PROJECTS_DB_ID: ${{ secrets.NOTION_PROJECTS_DB_ID }}
+          NOTION_WEEKLY_PARENT_ID: ${{ secrets.NOTION_WEEKLY_PARENT_ID }}
+        run: node scripts/generate-weekly-report.mjs
