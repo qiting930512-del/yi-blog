@@ -87,15 +87,19 @@ function extractSelect(page, keys) {
 // ── 抓取 Notion 資料 ─────────────────────────────────────────
 async function fetchWeeklyData() {
   const [actions, projects] = await Promise.all([
+    // 用 last_edited_time 取近 7 天編輯的行動（不依賴特定欄位名稱）
     queryDatabase(NOTION_ACTIONS_DB_ID, {
-      and: [
-        { property: '完成日期', date: { on_or_after: sevenDaysAgo } },
-      ],
+      timestamp: 'last_edited_time',
+      last_edited_time: { on_or_after: sevenDaysAgo },
     }),
+    // 支援多種進行中狀態名稱
     queryDatabase(NOTION_PROJECTS_DB_ID, {
       or: [
-        { property: '狀態', status: { equals: '進行中' } },
+        { property: '狀態', status: { equals: 'In Progress｜執行中' } },
+        { property: '狀態', status: { equals: 'In progress' } },
+        { property: '狀態', status: { equals: '即將開始' } },
         { property: 'Status', status: { equals: 'In Progress' } },
+        { property: 'Status', status: { equals: 'In progress' } },
       ],
     }),
   ]);
@@ -144,7 +148,10 @@ ${data.activeProjects.length ? data.activeProjects.map(p => `- ${p}`).join('\n')
     }),
   });
 
-  if (!res.ok) throw new Error(`Claude API error: ${res.status}`);
+  if (!res.ok) {
+    const errText = await res.text();
+    throw new Error(`Claude API error: ${res.status} — ${errText}`);
+  }
   const data2 = await res.json();
   const text = data2.content?.[0]?.text ?? '{}';
   return JSON.parse(text);
