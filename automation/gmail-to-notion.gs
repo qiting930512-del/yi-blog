@@ -10,17 +10,37 @@
  * 4. 執行一次 setupGmailTrigger() 設定定時同步
  */
 
-const GMAIL_NOTION_CONFIG = {
-  NOTION_API_KEY: 'YOUR_NOTION_API_KEY',   // 與 morning-report.gs 相同
-  NOTION_TASKS_DB_ID: 'YOUR_TASKS_DB_ID', // 與 morning-report.gs 相同
-  SYNCED_LABEL: 'notion-synced',           // Gmail 標籤名稱（用來標記已同步）
-  SEARCH_QUERY: 'is:starred is:unread',    // 要同步哪些信（預設：星號未讀）
-};
+function getGmailConfig() {
+  const props = PropertiesService.getScriptProperties();
+  return {
+    NOTION_API_KEY:    props.getProperty('NOTION_API_KEY')    || '',
+    NOTION_TASKS_DB_ID: props.getProperty('NOTION_TASKS_DB_ID') || '',
+    SYNCED_LABEL:      props.getProperty('SYNCED_LABEL')      || 'notion-synced',
+    SEARCH_QUERY:      props.getProperty('SEARCH_QUERY')      || 'is:starred is:unread',
+  };
+}
+
+/**
+ * 第一步：填入金鑰（只需執行一次）
+ * 若已在 morning-report.gs 的同個專案執行過 setupCredentials()，
+ * NOTION_API_KEY 與 NOTION_TASKS_DB_ID 已存在，只需執行此函式設定其餘值
+ */
+function setupGmailCredentials() {
+  const existing = PropertiesService.getScriptProperties().getProperties();
+  PropertiesService.getScriptProperties().setProperties({
+    NOTION_API_KEY:     existing.NOTION_API_KEY     || 'YOUR_NOTION_API_KEY',
+    NOTION_TASKS_DB_ID: existing.NOTION_TASKS_DB_ID || 'YOUR_TASKS_DB_ID',
+    SYNCED_LABEL:       'notion-synced',
+    SEARCH_QUERY:       'is:starred is:unread',
+  });
+  Logger.log('✅ Gmail→Notion 金鑰已儲存到 Script Properties');
+}
 
 /**
  * 主函式：掃描 Gmail 並同步到 Notion
  */
 function syncGmailToNotion() {
+  const GMAIL_NOTION_CONFIG = getGmailConfig();
   if (!GMAIL_NOTION_CONFIG.NOTION_API_KEY || GMAIL_NOTION_CONFIG.NOTION_API_KEY === 'YOUR_NOTION_API_KEY') {
     Logger.log('⚠️ 請先填入 NOTION_API_KEY');
     return;
@@ -43,7 +63,7 @@ function syncGmailToNotion() {
   let successCount = 0;
   threads.forEach(thread => {
     const message = thread.getMessages()[0];
-    const success = createNotionTask(message, thread);
+    const success = createNotionTask(message, thread, GMAIL_NOTION_CONFIG);
 
     if (success) {
       // 標記為已同步，移除星號（可選）
@@ -61,7 +81,7 @@ function syncGmailToNotion() {
 /**
  * 在 Notion 建立任務
  */
-function createNotionTask(message, thread) {
+function createNotionTask(message, thread, GMAIL_NOTION_CONFIG) {
   try {
     const from = message.getFrom();
     const subject = thread.getFirstMessageSubject();
