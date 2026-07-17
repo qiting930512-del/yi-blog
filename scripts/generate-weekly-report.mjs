@@ -11,7 +11,6 @@
  */
 
 const {
-  ANTHROPIC_API_KEY,
   NOTION_TOKEN,
   NOTION_ACTIONS_DB_ID,
   NOTION_PROJECTS_DB_ID,
@@ -24,7 +23,7 @@ function requireEnv(name) {
     process.exit(1);
   }
 }
-['ANTHROPIC_API_KEY', 'NOTION_TOKEN', 'NOTION_WEEKLY_PARENT_ID'].forEach(requireEnv);
+['NOTION_TOKEN', 'NOTION_WEEKLY_PARENT_ID'].forEach(requireEnv);
 
 // ── 日期工具 ──────────────────────────────────────────────────
 function isoWeek(date) {
@@ -92,14 +91,12 @@ async function fetchWeeklyData() {
       timestamp: 'last_edited_time',
       last_edited_time: { on_or_after: sevenDaysAgo },
     }),
-    // 支援多種進行中狀態名稱
+    // 支援多種進行中狀態名稱（只用 狀態 欄位）
     queryDatabase(NOTION_PROJECTS_DB_ID, {
       or: [
         { property: '狀態', status: { equals: 'In Progress｜執行中' } },
         { property: '狀態', status: { equals: 'In progress' } },
         { property: '狀態', status: { equals: '即將開始' } },
-        { property: 'Status', status: { equals: 'In Progress' } },
-        { property: 'Status', status: { equals: 'In progress' } },
       ],
     }),
   ]);
@@ -116,45 +113,14 @@ async function fetchWeeklyData() {
   return { completedActions, activeProjects };
 }
 
-// ── Claude 生成週報 ──────────────────────────────────────────
-async function generateReport(data) {
-  const prompt = `你是逸（綺庭張）的個人助理 Claude。今天是週五，請根據以下本週資料，用繁體中文撰寫一份簡潔的週報。
-
-本週完成的行動（Actions）：
-${data.completedActions.length ? data.completedActions.map(a => `- ${a}`).join('\n') : '- （本週無記錄完成的行動）'}
-
-目前進行中的專案（Projects）：
-${data.activeProjects.length ? data.activeProjects.map(p => `- ${p}`).join('\n') : '- （無進行中專案）'}
-
-請輸出以下 JSON 格式（只輸出 JSON，不要有其他文字）：
-{
-  "completed": ["完成項目1", "完成項目2"],
-  "inProgress": ["進行中項目1"],
-  "nextWeek": ["下週重點1", "下週重點2", "下週重點3"],
-  "messageToYi": "給逸的一句話（溫暖、簡短）"
-}`;
-
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'x-api-key': ANTHROPIC_API_KEY,
-      'anthropic-version': '2023-06-01',
-      'content-type': 'application/json',
-    },
-    body: JSON.stringify({
-      model: 'claude-haiku-4-5-20251001',
-      max_tokens: 1024,
-      messages: [{ role: 'user', content: prompt }],
-    }),
-  });
-
-  if (!res.ok) {
-    const errText = await res.text();
-    throw new Error(`Claude API error: ${res.status} — ${errText}`);
-  }
-  const data2 = await res.json();
-  const text = data2.content?.[0]?.text ?? '{}';
-  return JSON.parse(text);
+// ── 模板生成週報（不需要 Claude API）────────────────────────
+function generateReport(data) {
+  return {
+    completed: data.completedActions.length ? data.completedActions : ['本週無記錄完成的行動'],
+    inProgress: data.activeProjects.length ? data.activeProjects : ['無進行中專案'],
+    nextWeek: ['（請在 Notion 手動填寫下週重點）'],
+    messageToYi: '記錄本身就是一種前進。',
+  };
 }
 
 // ── 建立 Notion 頁面 ─────────────────────────────────────────
@@ -220,8 +186,8 @@ async function main() {
   console.log(`  已完成行動：${weeklyData.completedActions.length} 筆`);
   console.log(`  進行中專案：${weeklyData.activeProjects.length} 筆`);
 
-  const report = await generateReport(weeklyData);
-  console.log('  Claude 生成週報完成');
+  const report = generateReport(weeklyData);
+  console.log('  週報模板生成完成');
 
   await createWeeklyPage(report);
 }
