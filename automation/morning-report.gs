@@ -2,24 +2,45 @@
  * P1：每日晨間報告 — 自動寄信到你的 Gmail（手機即收到通知）
  *
  * 設定步驟：
- * 1. 前往 script.google.com → 新增專案
- * 2. 貼入此檔案全部內容
- * 3. 填寫下方 CONFIG 的值
- * 4. 執行一次 setupTrigger() 設定排程
- * 5. 授權 Gmail / Calendar / UrlFetch 權限
+ * 1. 前往 script.google.com → 新增專案，貼入此檔案全部內容
+ * 2. 執行一次 setupCredentials() 填入所有金鑰（只需執行一次）
+ * 3. 執行一次 setupTrigger() 設定排程
+ * 4. 授權 Gmail / Calendar / UrlFetch 權限
+ *
+ * 如何取得 NOTION_TASKS_DB_ID：
+ * - 在 Notion 打開你的任務資料庫 → 點右上角「...」→「Copy link」
+ * - URL 中 notion.so/xxx/ 後面那串 32 碼英數字即為 DB ID
  */
 
-const CONFIG = {
-  MY_EMAIL: 'qiting930512@gmail.com',       // 收報告的信箱（你的 Gmail）
-  MORNING_HOUR: 8,                           // 幾點發送（24小時制，8 = 早上8點）
-  NOTION_API_KEY: 'YOUR_NOTION_API_KEY',     // Notion Integration Token（見下方說明）
-  NOTION_TASKS_DB_ID: 'YOUR_TASKS_DB_ID',   // Notion 任務資料庫 ID（見下方說明）
-};
+function getConfig() {
+  const props = PropertiesService.getScriptProperties();
+  return {
+    MY_EMAIL:          props.getProperty('MY_EMAIL')          || 'qiting930512@gmail.com',
+    MORNING_HOUR:      Number(props.getProperty('MORNING_HOUR') || '8'),
+    NOTION_API_KEY:    props.getProperty('NOTION_API_KEY')    || '',
+    NOTION_TASKS_DB_ID: props.getProperty('NOTION_TASKS_DB_ID') || '',
+  };
+}
+
+/**
+ * 第一步：填入金鑰（只需執行一次）
+ * 執行前先把下方的值換成真實內容
+ */
+function setupCredentials() {
+  PropertiesService.getScriptProperties().setProperties({
+    MY_EMAIL:            'qiting930512@gmail.com',
+    MORNING_HOUR:        '8',
+    NOTION_API_KEY:      'YOUR_NOTION_API_KEY',   // ← 換成你的 Notion Integration Token
+    NOTION_TASKS_DB_ID:  'YOUR_TASKS_DB_ID',      // ← 換成你的任務資料庫 ID
+  });
+  Logger.log('✅ 金鑰已儲存到 Script Properties');
+}
 
 /**
  * 主函式：每天早上自動執行
  */
 function sendMorningReport() {
+  const CONFIG = getConfig();
   const today = new Date();
   const dateStr = Utilities.formatDate(today, 'Asia/Taipei', 'M/d (EEE)');
 
@@ -95,6 +116,7 @@ function getGmailSection() {
  * Notion 今日到期任務
  */
 function getNotionTasksSection(today) {
+  const CONFIG = getConfig();
   if (!CONFIG.NOTION_API_KEY || CONFIG.NOTION_API_KEY === 'YOUR_NOTION_API_KEY') {
     return '✅ Notion 任務\n（尚未設定 Notion API Key，跳過）';
   }
@@ -183,10 +205,10 @@ function setupTrigger() {
 
   ScriptApp.newTrigger('sendMorningReport')
     .timeBased()
-    .atHour(CONFIG.MORNING_HOUR)
+    .atHour(getConfig().MORNING_HOUR)
     .everyDays(1)
     .inTimezone('Asia/Taipei')
     .create();
 
-  Logger.log(`✅ 觸發器設定完成，每天 ${CONFIG.MORNING_HOUR}:00 台北時間發送晨間報告`);
+  Logger.log(`✅ 觸發器設定完成，每天 ${getConfig().MORNING_HOUR}:00 台北時間發送晨間報告`);
 }
