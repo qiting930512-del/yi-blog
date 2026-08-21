@@ -3,6 +3,10 @@
 // 展開自 game-design/scripts/00-prologue-script.md
 // 使用方式：用 Inky 開啟這個檔案測試，之後透過 ink-unity-integration 匯入 Unity
 
+// current_objective 是「引導層」讀取的全域變數，
+// Unity 端的 ObjectivePrompt.cs 會訂閱這個變數並顯示在畫面上
+VAR current_objective = "看看四周"
+
 -> scene_01_arrival
 
 === scene_01_arrival ===
@@ -17,7 +21,7 @@
 
 崔載元: ……好，那我大概知道我不在韓國了。
 
-// 教學提示：按住觀察鍵，檢查身上的物品
+~ current_objective = "按住觀察鍵，檢查身上的物品"
 -> scene_02_items
 
 === scene_02_items ===
@@ -42,8 +46,9 @@
 
 = check_phone
 崔載元: （螢幕全黑，鎖住）
-// 教學提示：試著解鎖
+~ current_objective = "試著解鎖手機"
 崔載元: 連自己是誰都不知道，這張臉倒是挺誠實的。
+~ current_objective = "看看手機桌面上有什麼"
 -> scene_03_phone_desktop
 
 === scene_03_phone_desktop ===
@@ -61,7 +66,7 @@
 
 = notebook
 崔載元: 這是我的字。但我不記得寫過這些。
-// 教學提示：記事本會保存重要資訊，隨時可以回來查看
+// 提示：記事本會保存重要資訊，隨時可以回來查看
 -> scene_03_phone_desktop
 
 = messages
@@ -73,9 +78,9 @@
 
 陳沐: 說什麼謝謝，你都要來了
 
-// 記憶碎片觸發：畫面短暫扭曲、雜訊閃過一兩秒
-// 教學提示：碰到跟某人有關的線索時，可能會觸發記憶碎片
+// 記憶碎片觸發：畫面短暫扭曲、雜訊閃過一兩秒（此提示不用寫進 current_objective，是被動觸發的系統事件）
 崔載元: 陳沐。至少現在，這是我唯一認得的名字。
+~ current_objective = "打開地圖，前往目的地"
 ->->
 
 === scene_04_leaving_airport ===
@@ -89,6 +94,7 @@
 
 崔載元: 一個不記得自己是誰的人，坐電車去一個自己不記得答應過的地方。這聽起來應該要很可怕，但老實說……還好。
 
+~ current_objective = "走到 share house 門口"
 -> scene_05_doorbell
 
 === scene_05_doorbell ===
