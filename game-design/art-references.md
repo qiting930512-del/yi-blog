@@ -6,7 +6,9 @@
 
 ## 整體方向回顧
 
-半寫實 3D，不是超寫實 AAA、也不是動漫賽璐璐風。核心參考：《Perfect Days》《Past Lives》《Minari》（自然主義色調、溫暖顆粒感）、《Season: A Letter to the Future》（繪畫感 3D 探索）、《Life is Strange》系列（自然主義角色建模、情緒光影）。侘寂精神：磨損材質、不完美細節、裂縫中的光。
+半寫實 3D，不是超寫實 AAA、也不是動漫賽璐璐風。核心參考：《Perfect Days》《Past Lives》《Minari》（自然主義色調、溫暖顆粒感）、《Season: A Letter to the Future》（繪畫感 3D 探索）。侘寂精神：磨損材質、不完美細節、裂縫中的光。
+
+**《Life is Strange》系列**：這款是本作**核心玩法參考**，不只是美術/角色建模上的參考——整個「走動 → 靠近物件觸發互動提示 → 互動觸發對話/回憶 → 對話選擇推進劇情」的迴圈，都是向它靠齊的對象。詳見 GDD 第 6 節。
 
 ---
 
