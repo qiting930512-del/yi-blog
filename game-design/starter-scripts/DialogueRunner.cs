@@ -4,6 +4,11 @@ using UnityEngine.Events;
 using System.Collections.Generic;
 using Ink.Runtime;
 
+// UnityEvent<string> 本身不能直接在 Inspector 裡顯示/設定，
+// 需要包成一個具名的子類別，這是 Unity 的固定寫法
+[System.Serializable]
+public class StringUnityEvent : UnityEvent<string> { }
+
 /// <summary>
 /// 整個遊戲只需要一個 DialogueRunner（單例），負責：
 /// 讀取編譯好的 Ink 檔案、播放對話文字、顯示選項按鈕、處理玩家選擇。
@@ -29,6 +34,8 @@ public class DialogueRunner : MonoBehaviour
 
     [Header("UI")]
     public GameObject dialoguePanel;
+    [Tooltip("顯示角色名字的 UI（可留空，如果不想顯示名牌）")]
+    public Text speakerNameText;
     public Text dialogueText;
     public Transform choicesContainer;
     public Button choiceButtonPrefab;
@@ -36,6 +43,10 @@ public class DialogueRunner : MonoBehaviour
     [Header("事件")]
     [Tooltip("整段對話播完（沒有更多內容、也沒有選項）時觸發，可以拿來解除鎖定下一步")]
     public UnityEvent onDialogueComplete;
+
+    [Tooltip("每次讀到一個 # fx:xxx 標籤時觸發，參數是標籤內容（例如 \"fx:memory_fragment\"）。" +
+             "可以另外寫一個 EffectsController 訂閱這個事件，依標籤名稱播放對應的畫面/音效")]
+    public StringUnityEvent onTag;
 
     private Story story;
     private List<GameObject> spawnedChoiceButtons = new List<GameObject>();
@@ -65,7 +76,8 @@ public class DialogueRunner : MonoBehaviour
         if (story.canContinue)
         {
             string text = story.Continue().Trim();
-            dialogueText.text = text;
+            DisplayLine(text);
+            HandleTags(story.currentTags);
             DisplayChoicesIfAny();
         }
         else if (story.currentChoices.Count > 0)
@@ -75,6 +87,45 @@ public class DialogueRunner : MonoBehaviour
         else
         {
             EndDialogue();
+        }
+    }
+
+    /// <summary>
+    /// 把 "角色名: 台詞" 這種寫法切開，角色名顯示在 speakerNameText，
+    /// 台詞顯示在 dialogueText。如果這行沒有冒號（例如場景描述），
+    /// 就整行當作台詞顯示、speakerNameText 清空。
+    /// </summary>
+    void DisplayLine(string rawLine)
+    {
+        int colonIndex = rawLine.IndexOf('：'); // 全形冒號
+        if (colonIndex < 0) colonIndex = rawLine.IndexOf(':'); // 半形冒號
+
+        if (colonIndex > 0)
+        {
+            string speaker = rawLine.Substring(0, colonIndex).Trim();
+            string line = rawLine.Substring(colonIndex + 1).Trim();
+
+            if (speakerNameText != null) speakerNameText.text = speaker;
+            dialogueText.text = line;
+        }
+        else
+        {
+            if (speakerNameText != null) speakerNameText.text = "";
+            dialogueText.text = rawLine;
+        }
+    }
+
+    /// <summary>
+    /// 讀取這一行帶的標籤（例如 "fx:memory_fragment"、"location:phone_ui"），
+    /// 全部透過 onTag 事件丟出去，實際要做什麼效果由訂閱的腳本（例如 EffectsController）決定。
+    /// 這裡刻意不寫死任何特效邏輯，保持 DialogueRunner 只負責「播放對話」這一件事。
+    /// </summary>
+    void HandleTags(List<string> tags)
+    {
+        if (tags == null) return;
+        foreach (string tag in tags)
+        {
+            onTag?.Invoke(tag);
         }
     }
 
