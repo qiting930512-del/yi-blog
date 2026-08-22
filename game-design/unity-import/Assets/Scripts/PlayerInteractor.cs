@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.UI;
+using TMPro;
 
 /// <summary>
 /// 掛在玩家角色身上。負責偵測附近有沒有可互動的物件（Interactable），
@@ -19,7 +19,7 @@ public class PlayerInteractor : MonoBehaviour
     public LayerMask interactableLayer;
 
     [Tooltip("顯示提示文字的 UI 元件，例如畫面下方的「按 E 互動」")]
-    public Text promptUI;
+    public TMP_Text promptUI;
 
     [Tooltip("互動鍵，預設是 E")]
     public KeyCode interactKey = KeyCode.E;

@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.UI;
+using TMPro;
 
 /// <summary>
 /// 「引導層」的核心：畫面上常駐顯示目前的教學提示/目標文字
@@ -20,7 +20,7 @@ using UnityEngine.UI;
 /// </summary>
 public class ObjectivePrompt : MonoBehaviour
 {
-    public Text objectiveText;
+    public TMP_Text objectiveText;
     public string variableName = "current_objective";
 
     void Start()

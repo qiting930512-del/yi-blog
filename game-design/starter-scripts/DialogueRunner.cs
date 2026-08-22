@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.Events;
 using System.Collections.Generic;
 using Ink.Runtime;
+using TMPro;
 
 // UnityEvent<string> 本身不能直接在 Inspector 裡顯示/設定，
 // 需要包成一個具名的子類別，這是 Unity 的固定寫法
@@ -20,8 +21,8 @@ public class StringUnityEvent : UnityEvent<string> { }
 ///
 /// 使用方式：
 /// 1. 建立一個空物件叫 "DialogueRunner"，掛上這個腳本
-/// 2. 建立對話 UI：一個顯示文字的 Text、一個裝選項按鈕的容器（Vertical Layout Group）、
-///    一個選項按鈕的 Prefab（上面要有一個 Text 子物件顯示選項文字）
+/// 2. 建立對話 UI：一個顯示文字的 TextMeshPro Text、一個裝選項按鈕的容器（Vertical Layout Group）、
+///    一個選項按鈕的 Prefab（上面要有一個 TextMeshPro Text 子物件顯示選項文字）
 /// 3. 把這些 UI 元件拖進對應欄位
 /// </summary>
 public class DialogueRunner : MonoBehaviour
@@ -35,8 +36,8 @@ public class DialogueRunner : MonoBehaviour
     [Header("UI")]
     public GameObject dialoguePanel;
     [Tooltip("顯示角色名字的 UI（可留空，如果不想顯示名牌）")]
-    public Text speakerNameText;
-    public Text dialogueText;
+    public TMP_Text speakerNameText;
+    public TMP_Text dialogueText;
     public Transform choicesContainer;
     public Button choiceButtonPrefab;
 
@@ -139,7 +140,7 @@ public class DialogueRunner : MonoBehaviour
         {
             Choice choice = story.currentChoices[i];
             Button button = Instantiate(choiceButtonPrefab, choicesContainer);
-            button.GetComponentInChildren<Text>().text = choice.text;
+            button.GetComponentInChildren<TMP_Text>().text = choice.text;
 
             int choiceIndex = i; // 避免 closure 抓到錯誤的 i
             button.onClick.AddListener(() => OnChoiceClicked(choiceIndex));
