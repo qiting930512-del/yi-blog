@@ -170,6 +170,18 @@ public class DialogueRunner : MonoBehaviour
         if (story.currentChoices.Count == 0) ContinueStory();
     }
 
+    /// <summary>
+    /// 沒有選項按鈕顯示時（單純的台詞），滑鼠左鍵點一下就往下播放下一句。
+    /// 有選項按鈕顯示時交給按鈕自己的 onClick 處理，這裡不搶著推進。
+    /// </summary>
+    void Update()
+    {
+        if (dialoguePanel.activeSelf && story.currentChoices.Count == 0 && Input.GetMouseButtonDown(0))
+        {
+            OnContinueClicked();
+        }
+    }
+
     void EndDialogue()
     {
         dialoguePanel.SetActive(false);
